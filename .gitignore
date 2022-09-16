@@ -1,3 +1,11 @@
+# Apple
+.DS_Store
+backend/.idea
+
+# Docker volumes
+data/
+backend/sql/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
