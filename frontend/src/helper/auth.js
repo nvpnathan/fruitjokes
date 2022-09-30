@@ -64,7 +64,7 @@ export const auth = {
 };
 
 async function login(user) {
-  await postApi("token", user)
+  await postApi("api/v1/login/access-token", user)
     .then((response) => {
 	    if (response.status == 200)  return response.json()
 	    else throw 'Login Failure 401'

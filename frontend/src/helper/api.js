@@ -1,5 +1,5 @@
 function apiUrl() {
-  return 'http://localhost:8080/';
+  return 'http://localhost:8000/';
 }
 
 export function postApi(pathToResource, data) {

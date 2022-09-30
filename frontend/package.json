@@ -1,7 +1,6 @@
 {
   "name": "frontend",
   "version": "1.0.0",
-  "main": "index.js",
   "repository": "https://github.com/sdairs/vue3-fastapi-oath2-jwt-demo.git",
   "author": "sdairs",
   "license": "Apache License 2.0",
@@ -13,8 +12,9 @@
     "vuex": "4.0.2"
   },
   "devDependencies": {
-    "@parcel/transformer-vue": "2.0.1",
-    "parcel": "2.0.1"
+    "@parcel/transformer-vue": "^2.7.0",
+    "parcel": "^2.7.0",
+    "process": "^0.11.10"
   },
   "scripts": {
     "start": "parcel serve ./src/index.html",
