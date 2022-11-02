@@ -37,7 +37,7 @@ phases:
       - echo Build completed on `date`
       - echo Preparing spec files in new folder
       - mkdir artifacts
-      - cp backend/templates/imagedefinition.json artifacts/imagedefinition.json
+      - cp backend/build/imagedefinition.json artifacts/imagedefinition.json
       - echo Preparating artifacts
       - sed -i "s|<CONTAINER_NAME>|$CONTAINER_NAME|g" artifacts/imagedefinition.json
       - sed -i "s|<REPO_URL>|$REPO_URL:$IMAGE_TAG|g" artifacts/imagedefinition.json
