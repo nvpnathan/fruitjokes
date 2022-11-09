@@ -18,4 +18,5 @@ class User(Base):
     is_active = Column(Boolean, default=True)
     is_superuser = Column(Boolean, default=False)
 
+    jokes = relationship("Joke", back_populates="owner")
     # items = relationship("Item", back_populates="owner")

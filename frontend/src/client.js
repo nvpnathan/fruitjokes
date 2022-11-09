@@ -35,7 +35,7 @@ class FastAPIClient {
     return this.apiClient
         .post('/auth/login', form_data)
         .then((resp) => {
-          localStorage.setItem('token', JSON.stringify(resp.data));
+          localStorage.setItem('access-token', JSON.stringify(resp.data));
           return this.fetchUser();
         });
   }
@@ -65,7 +65,7 @@ class FastAPIClient {
   logout() {
     // Add here any other data that needs to be deleted from local storage
     // on logout
-    localStorage.removeItem('token');
+    localStorage.removeItem('access-token');
     localStorage.removeItem('user');
   }
 
@@ -82,17 +82,17 @@ class FastAPIClient {
   }
 
   getRecipe(recipeId) {
-    return this.apiClient.get(`/recipes/${recipeId}`);
+    return this.apiClient.get(`/jokes/${recipeId}`);
   }
 
   getRecipes(keyword) {
-    return this.apiClient.get(`/recipes/search/?keyword=${keyword}&max_results=10`).then(({data}) => {
+    return this.apiClient.get(`/jokes/search/?keyword=${keyword}&max_results=10`).then(({data}) => {
       return data;
     });
   }
 
   getUserRecipes() {
-    return this.apiClient.get(`/recipes/my-recipes/`).then(({data}) => {
+    return this.apiClient.get(`/jokes/my-jokes/`).then(({data}) => {
       return data;
     });
   }
@@ -104,12 +104,12 @@ class FastAPIClient {
       source,
       submitter_id: submitter_id,
     };
-    return this.apiClient.post(`/recipes/`, recipeData);
+    return this.apiClient.post(`/jokes/`, recipeData);
   }
 
 
   deleteRecipe(recipeId) {
-    return this.apiClient.delete(`/recipes/${recipeId}`);
+    return this.apiClient.delete(`/jokes/${recipeId}`);
   }
 }
 
@@ -117,7 +117,7 @@ class FastAPIClient {
 // every request is intercepted and has auth header injected.
 function localStorageTokenInterceptor(config) {
   const headers = {};
-  const tokenString = localStorage.getItem('token');
+  const tokenString = localStorage.getItem('access-token');
 
   if (tokenString) {
     const token = JSON.parse(tokenString);

@@ -9,7 +9,7 @@ from app.api import deps
 router = APIRouter()
 
 
-@router.get("/", response_model=List[schemas.Joke])
+@router.get("/my-jokes", response_model=List[schemas.Joke])
 def read_jokes(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
@@ -51,7 +51,7 @@ def update_joke(
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
-    Update an joke.
+    Update a joke.
     """
     joke = crud.joke.get(db=db, id=id)
     if not joke:
