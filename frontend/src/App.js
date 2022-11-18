@@ -4,7 +4,7 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import Login from './pages/login';
 import SignUp from './pages/sign-up';
 import Home from './pages/home';
-import RecipeDashboard from './pages/my-recipes';
+import RecipeDashboard from './pages/my-jokes';
 import ErrorPage from './pages/error-page';
 
 const App = () => {

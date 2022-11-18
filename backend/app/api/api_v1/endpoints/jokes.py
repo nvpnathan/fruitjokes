@@ -14,12 +14,12 @@ def read_jokes(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
     limit: int = 100,
-    current_user: models.User = Depends(deps.get_current_active_user),
+    current_user: models.Users = Depends(deps.get_current_active_user),
 ) -> Any:
     """
     Retrieve jokes.
     """
-    if crud.user.is_superuser(current_user):
+    if crud.users.is_superuser(current_user):
         jokes = crud.joke.get_multi(db, skip=skip, limit=limit)
     else:
         jokes = crud.joke.get_multi_by_owner(
@@ -33,7 +33,7 @@ def create_joke(
     *,
     db: Session = Depends(deps.get_db),
     joke_in: schemas.JokeCreate,
-    current_user: models.User = Depends(deps.get_current_active_user),
+    current_user: models.Users = Depends(deps.get_current_active_user),
 ) -> Any:
     """
     Create new joke.
@@ -48,7 +48,7 @@ def update_joke(
     db: Session = Depends(deps.get_db),
     id: int,
     joke_in: schemas.JokeUpdate,
-    current_user: models.User = Depends(deps.get_current_active_user),
+    current_user: models.Users = Depends(deps.get_current_active_user),
 ) -> Any:
     """
     Update a joke.
@@ -56,7 +56,7 @@ def update_joke(
     joke = crud.joke.get(db=db, id=id)
     if not joke:
         raise HTTPException(status_code=404, detail="Joke not found")
-    if not crud.user.is_superuser(current_user) and (joke.owner_id != current_user.id):
+    if not crud.users.is_superuser(current_user) and (joke.owner_id != current_user.id):
         raise HTTPException(status_code=400, detail="Not enough permissions")
     joke = crud.joke.update(db=db, db_obj=joke, obj_in=joke_in)
     return joke
@@ -67,7 +67,7 @@ def read_joke(
     *,
     db: Session = Depends(deps.get_db),
     id: int,
-    current_user: models.User = Depends(deps.get_current_active_user),
+    current_user: models.Users = Depends(deps.get_current_active_user),
 ) -> Any:
     """
     Get joke by ID.
@@ -75,7 +75,7 @@ def read_joke(
     joke = crud.joke.get(db=db, id=id)
     if not joke:
         raise HTTPException(status_code=404, detail="Joke not found")
-    if not crud.user.is_superuser(current_user) and (joke.owner_id != current_user.id):
+    if not crud.users.is_superuser(current_user) and (joke.owner_id != current_user.id):
         raise HTTPException(status_code=400, detail="Not enough permissions")
     return joke
 
@@ -85,7 +85,7 @@ def delete_joke(
     *,
     db: Session = Depends(deps.get_db),
     id: int,
-    current_user: models.User = Depends(deps.get_current_active_user),
+    current_user: models.Users = Depends(deps.get_current_active_user),
 ) -> Any:
     """
     Delete a joke.
@@ -93,7 +93,7 @@ def delete_joke(
     joke = crud.joke.get(db=db, id=id)
     if not joke:
         raise HTTPException(status_code=404, detail="Joke not found")
-    if not crud.user.is_superuser(current_user) and (joke.owner_id != current_user.id):
+    if not crud.users.is_superuser(current_user) and (joke.owner_id != current_user.id):
         raise HTTPException(status_code=400, detail="Not enough permissions")
     joke = crud.joke.remove(db=db, id=id)
     return joke

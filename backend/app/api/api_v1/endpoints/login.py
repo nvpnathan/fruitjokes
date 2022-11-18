@@ -26,12 +26,12 @@ def login_access_token(
     """
     OAuth2 compatible token login, get an access token for future requests
     """
-    user = crud.user.authenticate(
+    user = crud.users.authenticate(
         db, email=form_data.username, password=form_data.password
     )
     if not user:
         raise HTTPException(status_code=400, detail="Incorrect email or password")
-    elif not crud.user.is_active(user):
+    elif not crud.users.is_active(user):
         raise HTTPException(status_code=400, detail="Inactive user")
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     return {
@@ -42,8 +42,8 @@ def login_access_token(
     }
 
 
-@router.post("/auth/test-token", response_model=schemas.User)
-def test_token(current_user: models.User = Depends(deps.get_current_user)) -> Any:
+@router.post("/auth/test-token", response_model=schemas.Users)
+def test_token(current_user: models.Users = Depends(deps.get_current_user)) -> Any:
     """
     Test access token
     """
@@ -55,7 +55,7 @@ def recover_password(email: str, db: Session = Depends(deps.get_db)) -> Any:
     """
     Password Recovery
     """
-    user = crud.user.get_by_email(db, email=email)
+    user = crud.users.get_by_email(db, email=email)
 
     if not user:
         raise HTTPException(

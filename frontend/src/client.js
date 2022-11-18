@@ -92,7 +92,7 @@ class FastAPIClient {
   }
 
   getUserRecipes() {
-    return this.apiClient.get(`/jokes/my-jokes/`).then(({data}) => {
+    return this.apiClient.get(`/jokes/my-jokes`).then(({data}) => {
       return data;
     });
   }

@@ -11,7 +11,7 @@ class UserCreate(UserBase):
     password: str
 
 
-class User(UserBase):
+class Users(UserBase):
     id: int
     is_active: bool
     items: list[Item] = []

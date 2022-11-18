@@ -3,20 +3,20 @@ import React, {useState} from "react";
 import PopupModal from "../Modal/PopupModal";
 import FormInput from "../FormInput/FormInput";
 
-const RecipeTable = ({recipes}) => {
+const RecipeTable = ({jokes}) => {
 
   const [recipeInfoModal, setRecipeInfoModal] = useState(false)
 
     return (
       <>
         <div className="sections-list">
-          {recipes.length && (
-              recipes.map((recipe) => (
-                <Recipe showRecipeInfoModal={() => setRecipeInfoModal(recipe)} key={recipe.id} recipe={recipe}  />
+          {jokes.length && (
+              jokes.map((joke) => (
+                <Recipe showRecipeInfoModal={() => setRecipeInfoModal(joke)} key={joke.id} joke={joke}  />
               ))
           )}
-          {!recipes.length && (
-              <p>No recipes found!</p>
+          {!jokes.length && (
+              <p>No jokes found!</p>
           )}
         </div>
         {recipeInfoModal && <PopupModal

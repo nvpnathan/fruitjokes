@@ -3,4 +3,4 @@
 from .base_class import Base  # noqa
 from ..models.item import Item  # noqa
 from ..models.joke import Joke  # noqa
-from ..models.user import User  # noqa
+from ..models.user import Users  # noqa

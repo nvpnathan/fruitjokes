@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from .item import Item  # noqa: F401
 
 
-class User(Base):
+class Users(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     full_name = Column(String)
@@ -18,5 +18,5 @@ class User(Base):
     is_active = Column(Boolean, default=True)
     is_superuser = Column(Boolean, default=False)
 
-    jokes = relationship("Joke", back_populates="owner")
-    # items = relationship("Item", back_populates="owner")
+    #jokes = relationship("Joke", back_populates="owner")
+    #items = relationship("Item", back_populates="owner")

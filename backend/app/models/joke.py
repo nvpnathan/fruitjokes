@@ -6,7 +6,7 @@ from sqlalchemy.orm import relationship
 from ..db.base_class import Base
 
 if TYPE_CHECKING:
-    from .user import User  # noqa: F401
+    from .user import Users  # noqa: F401
 
 
 class Joke(Base):
@@ -16,4 +16,4 @@ class Joke(Base):
     description = Column(String, index=True)
     owner_id = Column(Integer, ForeignKey("users.id"))
 
-    owner = relationship("User", back_populates="jokes")
+    # owner = relationship("User", back_populates="jokes")
