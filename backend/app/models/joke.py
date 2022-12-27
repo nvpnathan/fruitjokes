@@ -1,19 +1,15 @@
-from typing import TYPE_CHECKING
-
-from sqlalchemy import Column, ForeignKey, Integer, String
-from sqlalchemy.orm import relationship
-
-from ..db.base_class import Base
-
-if TYPE_CHECKING:
-    from .user import Users  # noqa: F401
+from tortoise import fields, models
+from .user import Users
 
 
-class Joke(Base):
+class Jokes(models.Model):
+    id = fields.IntField(pk=True)
+    title = fields.CharField(max_length=225)
+    content = fields.TextField()
+    author = fields.ForeignKeyField("Users", related_name="joke")
+    created_at = fields.DatetimeField(auto_now_add=True)
+    modified_at = fields.DatetimeField(auto_now=True)
 
-    id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, index=True)
-    description = Column(String, index=True)
-    owner_id = Column(Integer, ForeignKey("users.id"))
-
-    # owner = relationship("User", back_populates="jokes")
+    def __str__(self):
+        return f"{self.title}, {self.author_id} on {self.created_at}"
+    

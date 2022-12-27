@@ -85,7 +85,7 @@ def read_user_me(
     return current_user
 
 
-@router.post("/open", response_model=schemas.Users)
+@router.post("/register", response_model=schemas.Users)
 def create_user_open(
     *,
     db: Session = Depends(deps.get_db),

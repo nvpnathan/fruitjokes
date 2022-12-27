@@ -1,22 +1,10 @@
-from typing import TYPE_CHECKING
-
-from sqlalchemy import Boolean, Column, Integer, String
-from sqlalchemy.orm import relationship
-
-from ..db.base_class import Base
-
-if TYPE_CHECKING:
-    from .item import Item  # noqa: F401
+from tortoise import fields, models
 
 
-class Users(Base):
-
-    id = Column(Integer, primary_key=True, index=True)
-    full_name = Column(String)
-    email = Column(String, unique=True, index=True)
-    hashed_password = Column(String)
-    is_active = Column(Boolean, default=True)
-    is_superuser = Column(Boolean, default=False)
-
-    #jokes = relationship("Joke", back_populates="owner")
-    #items = relationship("Item", back_populates="owner")
+class Users(models.Model):
+    id = fields.IntField(pk=True)
+    username = fields.CharField(max_length=20, unique=True)
+    full_name = fields.CharField(max_length=50, null=True)
+    password = fields.CharField(max_length=128, null=True)
+    created_at = fields.DatetimeField(auto_now_add=True)
+    modified_at = fields.DatetimeField(auto_now=True)
