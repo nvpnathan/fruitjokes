@@ -12,24 +12,24 @@ const getters = {
 
 const actions = {
   async createJoke({dispatch}, joke) {
-    await axios.post('jokes', joke);
+    await axios.post('api/v1/joke', joke);
     await dispatch('getJokes');
   },
   async getJokes({commit}) {
-    let {data} = await axios.get('jokes');
+    let {data} = await axios.get('api/v1/jokes');
     commit('setJokes', data);
   },
   async viewJoke({commit}, id) {
-    let {data} = await axios.get(`joke/${id}`);
+    let {data} = await axios.get(`api/v1/joke/${id}`);
     commit('setJoke', data);
   },
   // eslint-disable-next-line no-empty-pattern
   async updateJoke({}, joke) {
-    await axios.patch(`joke/${joke.id}`, joke.form);
+    await axios.patch(`api/v1/joke/${joke.id}`, joke.form);
   },
   // eslint-disable-next-line no-empty-pattern
   async deleteJoke({}, id) {
-    await axios.delete(`joke/${id}`);
+    await axios.delete(`api/v1/joke/${id}`);
   }
 };
 
