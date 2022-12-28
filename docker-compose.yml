@@ -22,7 +22,7 @@ services:
       - 8080:8080
   db:
     container_name: postgres
-    image: postgres:14.3
+    image: postgres:15.1
     restart: always
     ports:
       - "5432:5432"

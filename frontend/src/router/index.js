@@ -6,7 +6,7 @@ import DashboardView from '@/views/DashboardView.vue';
 import ProfileView from '@/views/ProfileView.vue';
 import JokeView from '@/views/JokeView.vue';
 import EditJokeView from '@/views/EditJokeView.vue';
-import store from '@/store'; // NEW
+import store from '@/store';
 
 
 const routes = [

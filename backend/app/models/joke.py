@@ -1,5 +1,4 @@
 from tortoise import fields, models
-from .user import Users
 
 
 class Jokes(models.Model):
