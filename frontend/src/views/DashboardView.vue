@@ -52,9 +52,8 @@
 <script>
 import { defineComponent } from 'vue';
 import { mapGetters, mapActions } from 'vuex';
-
 export default defineComponent({
-  name: 'DashBoard',
+  name: 'Dashboard',
   data() {
     return {
       form: {
