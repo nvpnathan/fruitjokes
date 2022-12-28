@@ -11,7 +11,7 @@ const getters = {
 
 const actions = {
   async register({dispatch}, form) {
-    await axios.post('api/v1/users/register', form);
+    await axios.post('api/v1/register', form);
     let UserForm = new FormData();
     UserForm.append('email', form.username);
     UserForm.append('password', form.password);
@@ -19,11 +19,11 @@ const actions = {
     await dispatch('logIn', UserForm);
   },
   async logIn({dispatch}, user) {
-    await axios.post('api/v1/auth/login', user);
+    await axios.post('api/v1/login', user);
     await dispatch('viewMe');
   },
   async viewMe({commit}) {
-    let {data} = await axios.get('api/v1/users/me');
+    let {data} = await axios.get('api/v1/user/me');
     await commit('setUser', data);
   },
   // eslint-disable-next-line no-empty-pattern

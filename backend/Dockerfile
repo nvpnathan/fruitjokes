@@ -1,13 +1,21 @@
-FROM python:3.10
+FROM python:3.11-buster
 
 MAINTAINER nvpnathan
 
-WORKDIR /code
+RUN mkdir app
+WORKDIR /app
 
-COPY ./requirements.txt /code/requirements.txt
+ENV PATH="${PATH}:/root/.local/bin"
+ENV PYTHONPATH=.
 
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+COPY requirements.txt .
 
-COPY ./app /code/app
+RUN pip install --no-cache-dir --upgrade -r requirements.txt
+
+# for migrations
+COPY migrations .
+COPY pyproject.toml .
+
+COPY app/ .
 
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "5000"]

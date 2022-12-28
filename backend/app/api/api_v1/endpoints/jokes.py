@@ -1,99 +1,72 @@
-from typing import Any, List
+from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
+from tortoise.contrib.fastapi import HTTPNotFoundError
+from tortoise.exceptions import DoesNotExist
 
-from app import crud, models, schemas
-from app.api import deps
+import app.crud.jokes as crud
+from app.auth.jwthandler import get_current_user
+from app.schemas.jokes import JokeOutSchema, JokeInSchema, UpdateJoke
+from app.schemas.token import Status
+from app.schemas.users import UserOutSchema
 
 router = APIRouter()
 
 
-@router.get("/my-jokes", response_model=List[schemas.Joke])
-def read_jokes(
-    db: Session = Depends(deps.get_db),
-    skip: int = 0,
-    limit: int = 100,
-    current_user: models.Users = Depends(deps.get_current_active_user),
-) -> Any:
-    """
-    Retrieve jokes.
-    """
-    if crud.users.is_superuser(current_user):
-        jokes = crud.joke.get_multi(db, skip=skip, limit=limit)
-    else:
-        jokes = crud.joke.get_multi_by_owner(
-            db=db, owner_id=current_user.id, skip=skip, limit=limit
+@router.get(
+    "/jokes",
+    response_model=List[JokeOutSchema],
+    dependencies=[Depends(get_current_user)],
+)
+async def get_jokes():
+    return await crud.get_jokes()
+
+
+@router.get(
+    "/joke/{joke_id}",
+    response_model=JokeOutSchema,
+    dependencies=[Depends(get_current_user)],
+)
+async def get_joke(joke_id: int) -> JokeOutSchema:
+    try:
+        return await crud.get_joke(joke_id)
+    except DoesNotExist:
+        raise HTTPException(
+            status_code=404,
+            detail="Joke does not exist",
         )
-    return jokes
 
 
-@router.post("/", response_model=schemas.Joke)
-def create_joke(
-    *,
-    db: Session = Depends(deps.get_db),
-    joke_in: schemas.JokeCreate,
-    current_user: models.Users = Depends(deps.get_current_active_user),
-) -> Any:
-    """
-    Create new joke.
-    """
-    joke = crud.joke.create_with_owner(db=db, obj_in=joke_in, owner_id=current_user.id)
-    return joke
+@router.post(
+    "/joke", response_model=JokeOutSchema, dependencies=[Depends(get_current_user)]
+)
+async def create_joke(
+    joke: JokeInSchema, current_user: UserOutSchema = Depends(get_current_user)
+) -> JokeOutSchema:
+    return await crud.create_joke(joke, current_user)
 
 
-@router.put("/{id}", response_model=schemas.Joke)
-def update_joke(
-    *,
-    db: Session = Depends(deps.get_db),
-    id: int,
-    joke_in: schemas.JokeUpdate,
-    current_user: models.Users = Depends(deps.get_current_active_user),
-) -> Any:
-    """
-    Update a joke.
-    """
-    joke = crud.joke.get(db=db, id=id)
-    if not joke:
-        raise HTTPException(status_code=404, detail="Joke not found")
-    if not crud.users.is_superuser(current_user) and (joke.owner_id != current_user.id):
-        raise HTTPException(status_code=400, detail="Not enough permissions")
-    joke = crud.joke.update(db=db, db_obj=joke, obj_in=joke_in)
-    return joke
+@router.patch(
+    "/joke/{joke_id}",
+    dependencies=[Depends(get_current_user)],
+    response_model=JokeOutSchema,
+    responses={404: {"model": HTTPNotFoundError}},
+)
+async def update_joke(
+    joke_id: int,
+    joke: UpdateJoke,
+    current_user: UserOutSchema = Depends(get_current_user),
+) -> JokeOutSchema:
+    return await crud.update_joke(joke_id, joke, current_user)
 
 
-@router.get("/{id}", response_model=schemas.Joke)
-def read_joke(
-    *,
-    db: Session = Depends(deps.get_db),
-    id: int,
-    current_user: models.Users = Depends(deps.get_current_active_user),
-) -> Any:
-    """
-    Get joke by ID.
-    """
-    joke = crud.joke.get(db=db, id=id)
-    if not joke:
-        raise HTTPException(status_code=404, detail="Joke not found")
-    if not crud.users.is_superuser(current_user) and (joke.owner_id != current_user.id):
-        raise HTTPException(status_code=400, detail="Not enough permissions")
-    return joke
-
-
-@router.delete("/{id}", response_model=schemas.Joke)
-def delete_joke(
-    *,
-    db: Session = Depends(deps.get_db),
-    id: int,
-    current_user: models.Users = Depends(deps.get_current_active_user),
-) -> Any:
-    """
-    Delete a joke.
-    """
-    joke = crud.joke.get(db=db, id=id)
-    if not joke:
-        raise HTTPException(status_code=404, detail="Joke not found")
-    if not crud.users.is_superuser(current_user) and (joke.owner_id != current_user.id):
-        raise HTTPException(status_code=400, detail="Not enough permissions")
-    joke = crud.joke.remove(db=db, id=id)
-    return joke
+@router.delete(
+    "/joke/{joke_id}",
+    response_model=Status,
+    responses={404: {"model": HTTPNotFoundError}},
+    dependencies=[Depends(get_current_user)],
+)
+async def delete_joke(
+    joke_id: int, current_user: UserOutSchema = Depends(get_current_user)
+):
+    return await crud.delete_joke(joke_id, current_user)

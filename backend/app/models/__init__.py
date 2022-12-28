@@ -1,3 +1,2 @@
-from .item import Item
 from .user import Users
-from .joke import Joke
+from .joke import Jokes
