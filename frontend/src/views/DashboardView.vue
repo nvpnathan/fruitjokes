@@ -33,7 +33,7 @@
             <div class="card-body">
               <ul>
                 <li><strong>Joke Title:</strong> {{ joke.title }}</li>
-                <li><strong>Author:</strong> {{ joke.author.username }}</li>
+                <li><strong>Author:</strong> {{ joke.author_id }}</li>
                 <li><router-link :to="{name: 'Joke', params:{id: joke.id}}">View</router-link></li>
               </ul>
             </div>

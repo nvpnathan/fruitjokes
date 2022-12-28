@@ -19,19 +19,38 @@ You can get started with Fruit Jokes immediately on ECS Fargate.
 Alternatively you can set up a local development environment.
 
 ## Project Structure
+
+Frontend
+
 ```
 .
-├── app                  # "app" is a Python package
-│   ├── __init__.py      # this file makes "app" a "Python package"
-│   ├── main.py          # "main" module, e.g. import app.main
-│   ├── dependencies.py  # "dependencies" module, e.g. import app.dependencies
-│   └── routers          # "routers" is a "Python subpackage"
-│   │   ├── __init__.py  # makes "routers" a "Python subpackage"
-│   │   ├── items.py     # "items" submodule, e.g. import app.routers.items
-│   │   └── users.py     # "users" submodule, e.g. import app.routers.users
-│   └── internal         # "internal" is a "Python subpackage"
-│       ├── __init__.py  # makes "internal" a "Python subpackage"
-│       └── admin.py     # "admin" submodule, e.g. import app.internal.admin
+└── src
+    ├── assets
+    ├── components
+    ├── router
+    ├── store
+    |── modules
+    └── views
+```
+
+Backend
+
+```
+.
+├── app
+│   ├── api
+│   │   └── api_v1
+│   │       └── endpoints
+│   ├── auth
+│   ├── core
+│   ├── crud
+│   ├── db
+│   ├── internal
+│   ├── models
+│   └── schemas
+├── build
+├── migrations
+│   └── models
 ```
 
 ## Database Schema
@@ -56,21 +75,26 @@ model Author {
 ## Development Environment (Local)
 
 ```bash
-docker-compose up -d
+docker-compose up -d --build
+```
+
+## Apply the migrations:
+
+```bash
+docker-compose exec backend aerich upgrade
+```
+
+Ensure [http://localhost:5000](http://localhost:5000), [http://localhost:5000/docs](http://localhost:5000/docs), and [http://localhost:8080](http://localhost:8080) work as expected.
+
 ```
 ### System Requirements
 
 :bulb: Before you begin, make sure you have all the below installed:
 
-- [Python v3.10](https://python.org/)
+- [Python v3.11](https://python.org/)
 - [Docker](https://docs.docker.com/desktop/)
 - [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git/)
 
-
-### Initializing all the packages
-
-1. Execute the following commands in the project root folder:
-2. 
 # Support
 
 ## Ask a question about Fruit Jokes
