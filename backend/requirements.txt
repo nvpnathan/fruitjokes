@@ -1,23 +1,9 @@
-# Database
-SQLAlchemy~=1.4.41
-psycopg2
-psycopg2-binary
-
-# FastAPI
-pydantic~=1.10.2
-uvicorn~=0.18.3
-fastapi~=0.82.0
-python-dotenv
-
-# Security
-pyjwt~=2.4.0
-passlib~=1.7.4
-
-# Email
-emails~=0.6
-
-python-multipart
-starlette~=0.19.1
-tenacity~=8.0.1
-alembic~=1.8.1
-bcrypt
+aerich==0.7.1
+asyncpg==0.27.0
+bcrypt==4.0.1
+passlib==1.7.4
+fastapi==0.88.0
+python-jose==3.3.0
+python-multipart==0.0.5
+tortoise-orm==0.19.2
+uvicorn==0.20.0

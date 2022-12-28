@@ -1,6 +1,7 @@
 version: '3.7'
 services:
   # backend:
+  #   container_name: backend
   #   build: ./backend
   #   ports:
   #     - 5000:5000
@@ -10,6 +11,7 @@ services:
   #   env_file:
   #     - ./backend/.env
   frontend:
+    container_name: frontend
     build: ./frontend
     volumes:
       - './frontend:/app'
@@ -29,7 +31,6 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: example
       POSTGRES_DB: fruitjokes
-
   pgAdmin:
     container_name: pgAdmin
     restart: unless-stopped
@@ -44,7 +45,6 @@ services:
         - "5050:5050"
     depends_on:
         - db
-
   cache:
     container_name: redis
     image: redis:7.0
