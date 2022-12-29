@@ -10,4 +10,4 @@ class Jokes(models.Model):
     modified_at = fields.DatetimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.title}, {self.author_id} on {self.created_at}"
+        return f"{self.title}, {self.author} on {self.created_at}"

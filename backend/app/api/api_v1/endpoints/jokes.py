@@ -10,6 +10,7 @@ from app.schemas.jokes import JokeOutSchema, JokeInSchema, UpdateJoke
 from app.schemas.token import Status
 from app.schemas.users import UserOutSchema
 
+
 router = APIRouter()
 
 

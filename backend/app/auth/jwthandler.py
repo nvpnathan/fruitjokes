@@ -11,7 +11,7 @@ from tortoise.exceptions import DoesNotExist
 
 from app.schemas.token import TokenData
 from app.schemas.users import UserOutSchema
-from app.models import Users
+from app.db.models import Users
 
 
 SECRET_KEY: str = secrets.token_urlsafe(32)

@@ -3,7 +3,7 @@ from typing import Optional
 from pydantic import BaseModel
 from tortoise.contrib.pydantic import pydantic_model_creator
 
-from app.models import Jokes
+from app.db.models import Jokes
 
 
 JokeInSchema = pydantic_model_creator(

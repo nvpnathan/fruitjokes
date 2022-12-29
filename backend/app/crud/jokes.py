@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 from tortoise.exceptions import DoesNotExist
 
-from app.models import Jokes
+from app.db.models import Jokes
 from app.schemas.jokes import JokeOutSchema
 from app.schemas.token import Status
 

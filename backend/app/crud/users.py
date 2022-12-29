@@ -2,7 +2,7 @@ from fastapi import HTTPException
 from passlib.context import CryptContext
 from tortoise.exceptions import DoesNotExist, IntegrityError
 
-from app.models import Users
+from app.db.models import Users
 from app.schemas.token import Status
 from app.schemas.users import UserOutSchema
 
@@ -31,6 +31,6 @@ async def delete_user(user_id, current_user) -> Status:  # UPDATED
         deleted_count = await Users.filter(id=user_id).delete()
         if not deleted_count:
             raise HTTPException(status_code=404, detail=f"User {user_id} not found")
-        return Status(message=f"Deleted user {user_id}")  # UPDATED
+        return Status(message=f"Deleted user {user_id}")
 
     raise HTTPException(status_code=403, detail=f"Not authorized to delete")
