@@ -1,4 +1,3 @@
-import secrets
 from datetime import datetime, timedelta
 from typing import Optional
 
@@ -12,12 +11,9 @@ from tortoise.exceptions import DoesNotExist
 from app.schemas.token import TokenData
 from app.schemas.users import UserOutSchema
 from app.db.models import Users
+from app.core.config import settings
 
-
-SECRET_KEY: str = secrets.token_urlsafe(32)
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 90
-
+ACCESS_TOKEN_EXPIRE_MINUTES = 120
 
 class OAuth2PasswordBearerCookie(OAuth2):
     def __init__(
@@ -43,8 +39,7 @@ class OAuth2PasswordBearerCookie(OAuth2):
                     detail="Not authenticated",
                     headers={"WWW-Authenticate": "Bearer"},
                 )
-            else:
-                return None
+            return None
 
         return param
 
@@ -61,7 +56,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
         expire = datetime.utcnow() + timedelta(minutes=15)
 
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
     return encoded_jwt
 
@@ -74,7 +69,7 @@ async def get_current_user(token: str = Depends(security)):
     )
 
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         username: str = payload.get("sub")
         if username is None:
             raise credentials_exception

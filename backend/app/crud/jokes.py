@@ -46,4 +46,4 @@ async def delete_joke(joke_id, current_user) -> Status:
             raise HTTPException(status_code=404, detail=f"Joke {joke_id} not found")
         return Status(message=f"Deleted joke {joke_id}")
 
-    raise HTTPException(status_code=403, detail=f"Not authorized to delete")
+    raise HTTPException(status_code=403, detail=f"Not authorized to delete {joke_id}")
