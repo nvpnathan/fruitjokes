@@ -12,7 +12,7 @@ def register_tortoise(
     async def init_orm():
         await Tortoise.init(config=config)
         if generate_schemas:
-            await Tortoise.generate_schemas()
+            await Tortoise.generate_schemas(safe=True)
 
     @app.on_event("shutdown")
     async def close_orm():
