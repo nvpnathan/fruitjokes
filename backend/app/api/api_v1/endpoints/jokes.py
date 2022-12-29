@@ -39,7 +39,7 @@ async def get_joke(joke_id: int) -> JokeOutSchema:
 
 
 @router.post(
-    "/joke", response_model=JokeOutSchema, dependencies=[Depends(get_current_user)]
+    "/jokes", response_model=JokeOutSchema, dependencies=[Depends(get_current_user)]
 )
 async def create_joke(
     joke: JokeInSchema, current_user: UserOutSchema = Depends(get_current_user)

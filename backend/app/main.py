@@ -1,12 +1,16 @@
 import uvicorn
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
+from tortoise import Tortoise
+
+from app.db.register import register_tortoise
+from app.core.config import settings, TORTOISE_ORM
+
+# enable schemas to read relationship between models
+Tortoise.init_models(["app.db.models"], "models")
 
 
-from .db.register import register_tortoise
-
-from .api.api_v1.api import api_router
-from .core.config import settings, TORTOISE_ORM
+from app.api.api_v1.api import api_router
 
 app = FastAPI(
     title=settings.PROJECT_NAME, openapi_url=f"{settings.API_V1_STR}/openapi.json"

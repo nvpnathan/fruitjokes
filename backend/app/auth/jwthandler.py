@@ -16,7 +16,7 @@ from app.db.models import Users
 
 SECRET_KEY: str = secrets.token_urlsafe(32)
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 90
 
 
 class OAuth2PasswordBearerCookie(OAuth2):

@@ -12,7 +12,7 @@ const getters = {
 
 const actions = {
   async createJoke({dispatch}, joke) {
-    await axios.post('api/v1/joke', joke);
+    await axios.post('api/v1/jokes', joke);
     await dispatch('getJokes');
   },
   async getJokes({commit}) {
