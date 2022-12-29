@@ -4,20 +4,8 @@ from typing import Any, Dict, List, Optional, Union
 from pydantic import AnyHttpUrl, BaseSettings, HttpUrl, PostgresDsn, validator
 
 
-TORTOISE_ORM = {
-    "connections": {"default": "postgres://postgres:example@db:5432/fruitjokes"},
-    "apps": {
-        "models": {
-            "models": [
-                "app.db.models", "aerich.models"
-            ],
-            "default_connection": "default"
-        }
-    }
-}
-
-
 class Settings(BaseSettings):
+    PROJECT_NAME: str
     API_V1_STR: str = "/api/v1"
     SECRET_KEY: str = secrets.token_urlsafe(32)
     # 60 minutes * 24 hours * 8 days = 8 days
@@ -27,7 +15,7 @@ class Settings(BaseSettings):
     # BACKEND_CORS_ORIGINS is a JSON-formatted list of origins
     # e.g: '["http://localhost", "http://localhost:4200", "http://localhost:3000", \
     # "http://localhost:8080", "http://local.dockertoolbox.tiangolo.com"]'
-    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = ["http://localhost", "http://localhost:4200", "http://localhost:5000", "http://localhost:3000",
+    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = ["http://localhost", "http://localhost:4200", "http://localhost:3000",
                                               "http://localhost:8080", "http://local.dockertoolbox.tiangolo.com"]
 
     @validator("BACKEND_CORS_ORIGINS", pre=True)
@@ -38,12 +26,11 @@ class Settings(BaseSettings):
             return v
         raise ValueError(v)
 
-    PROJECT_NAME: str
-
     POSTGRES_SERVER: str
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
     POSTGRES_DB: str
+    POSTGRES_PORT: str
     TORTOISE_DATABASE_URI: Optional[PostgresDsn] = None
 
     @validator("TORTOISE_DATABASE_URI", pre=True)
@@ -51,10 +38,11 @@ class Settings(BaseSettings):
         if isinstance(v, str):
             return v
         return PostgresDsn.build(
-            scheme="postgresql",
+            scheme="postgres",
             user=values.get("POSTGRES_USER"),
             password=values.get("POSTGRES_PASSWORD"),
             host=values.get("POSTGRES_SERVER"),
+            port=values.get("POSTGRES_PORT"),
             path=f"/{values.get('POSTGRES_DB') or ''}",
         )
 
@@ -64,3 +52,15 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
+TORTOISE_ORM = {
+    "connections": {"default": f"{settings.TORTOISE_DATABASE_URI}"},
+    "apps": {
+        "models": {
+            "models": [
+                "app.db.models", "aerich.models"
+            ],
+            "default_connection": "default"
+        }
+    }
+}
