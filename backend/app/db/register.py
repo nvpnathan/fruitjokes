@@ -17,3 +17,6 @@ def register_tortoise(
     @app.on_event("shutdown")
     async def close_orm():
         await Tortoise.close_connections()
+
+
+Tortoise.init_models(["app.db.models"], "models")
