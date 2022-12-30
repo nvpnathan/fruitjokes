@@ -1,6 +1,11 @@
 <template>
   <section>
-    <p>Welcome to FruitJokes!</p>
+    <h1><b>Welcome to FruitJokes!</b></h1>
+    <p>
+      <video width="750" height="500" controls autoplay >
+      <source src="/videos/fruitjokes.mp4" type="video/mp4"/>
+     </video>
+    </p>
 
     <div v-if="isLoggedIn" id="logout">
       <p id="logout">Click <a href="/dashboard">here</a> to view all jokes.</p>
