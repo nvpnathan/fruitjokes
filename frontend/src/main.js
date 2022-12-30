@@ -9,7 +9,7 @@ import store from './store';
 const app = createApp(App);
 
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = 'http://localhost:5000/';
+axios.defaults.baseURL = process.env.VUE_APP_API_URL;
 
 app.use(router);
 app.use(store);
