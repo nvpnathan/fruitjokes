@@ -14,8 +14,7 @@ class Settings(BaseSettings):
     SERVER_HOST: AnyHttpUrl
     # BACKEND_CORS_ORIGINS is a JSON-formatted list of origins
     # e.g: '["http://localhost", "http://localhost:4200", "http://localhost:3000"]'
-    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = ["http://localhost", "http://localhost:4200",
-                                              "http://localhost:3000", "http://localhost:8080"]
+    BACKEND_CORS_ORIGINS: Union[str, List[AnyHttpUrl]] = Field(env="FRONTEND")
 
     @validator("BACKEND_CORS_ORIGINS", pre=True)
     def assemble_cors_origins(cls, v: Union[str, List[str]]) -> Union[List[str], str]:
@@ -25,13 +24,13 @@ class Settings(BaseSettings):
             return v
         raise ValueError(v)
 
-    DATABASE_URL: str
+    # DATABASE_URL: str
     POSTGRES_SERVER: str
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
     POSTGRES_DB: str
     POSTGRES_PORT: str
-    TORTOISE_DATABASE_URI: Optional[PostgresDsn] = Field(env='DATABASE_URL')
+    TORTOISE_DATABASE_URI: Optional[PostgresDsn] = Optional[Field(env="DATABASE_URL")]
 
     @validator("TORTOISE_DATABASE_URI", pre=True)
     def assemble_db_connection(cls, v: Optional[str], values: Dict[str, Any]) -> Any:
