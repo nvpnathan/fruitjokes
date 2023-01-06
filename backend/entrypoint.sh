@@ -15,3 +15,5 @@ if $MIGRATE_DB = true; then
 fi
 
 sleep 5s
+
+exec "$@"
