@@ -11,6 +11,10 @@ ENV PYTHONPATH=.
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 
+COPY entrypoint.sh .
+
+RUN chmod +x entrypoint.sh
+
 COPY requirements.txt .
 
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
@@ -22,5 +26,7 @@ COPY pyproject.toml .
 COPY app/ /app/app
 
 EXPOSE 5000
+
+ENTRYPOINT ["sh", "entrypoint.sh"]
 
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "5000"]
