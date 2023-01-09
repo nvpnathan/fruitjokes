@@ -1,6 +1,27 @@
 import secrets
 from typing import Any, Dict, List, Optional, Union
-from pydantic import AnyHttpUrl, BaseSettings, PostgresDsn, validator, Field
+from pydantic import AnyHttpUrl, BaseSettings, BaseModel, PostgresDsn, validator, Field
+
+
+class DbModel(BaseModel):
+    dbClusterIdentifier: str
+    password: str
+    dbname: str
+    engine: str
+    port: str
+    host: str
+    username: str
+
+
+class DbSettings(BaseSettings):
+    FRUITJOKESBACKENDCLUSTER_SECRET: DbModel
+
+    class Config:
+        case_sensitive = True
+        env_file = "./.env"
+
+
+dbsettings = DbSettings()
 
 
 class Settings(BaseSettings):
@@ -24,13 +45,12 @@ class Settings(BaseSettings):
             return v
         raise ValueError(v)
 
-    # DATABASE_URL: str
-    POSTGRES_SERVER: str
-    POSTGRES_USER: str
-    POSTGRES_PASSWORD: str
-    POSTGRES_DB: str
-    POSTGRES_PORT: str
-    TORTOISE_DATABASE_URI: Optional[PostgresDsn] = Optional[Field(env="DATABASE_URL")]
+    POSTGRES_SERVER: Optional[str] = dbsettings.FRUITJOKESBACKENDCLUSTER_SECRET.host
+    POSTGRES_USER: Optional[str] = dbsettings.FRUITJOKESBACKENDCLUSTER_SECRET.username
+    POSTGRES_PASSWORD: Optional[str] = dbsettings.FRUITJOKESBACKENDCLUSTER_SECRET.password
+    POSTGRES_DB: Optional[str] = dbsettings.FRUITJOKESBACKENDCLUSTER_SECRET.dbname
+    POSTGRES_PORT: Optional[str] = dbsettings.FRUITJOKESBACKENDCLUSTER_SECRET.port
+    TORTOISE_DATABASE_URI: Optional[PostgresDsn] = None
 
     @validator("TORTOISE_DATABASE_URI", pre=True)
     def assemble_db_connection(cls, v: Optional[str], values: Dict[str, Any]) -> Any:
