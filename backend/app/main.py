@@ -5,11 +5,16 @@ from starlette.middleware.cors import CORSMiddleware
 from app.db.register import register_tortoise
 from app.core.config import settings, TORTOISE_ORM
 from app.api.api_v1.api import api_router
+from app.core.utils import PrometheusMiddleware, metrics
 
 
 app = FastAPI(
     title=settings.PROJECT_NAME, openapi_url=f"{settings.API_V1_STR}/openapi.json"
 )
+
+# Setting metrics middleware
+app.add_middleware(PrometheusMiddleware, app_name=settings.APP_NAME)
+app.add_route("/metrics", metrics)
 
 if settings.BACKEND_CORS_ORIGINS:
     app.add_middleware(

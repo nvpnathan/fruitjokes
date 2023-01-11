@@ -16,7 +16,7 @@
   import { defineComponent } from 'vue';
   import { mapGetters, mapActions } from 'vuex';
   export default defineComponent({
-    name: 'Joke',
+    name: 'GetJoke',
     props: ['id'],
     async created() {
       try {
