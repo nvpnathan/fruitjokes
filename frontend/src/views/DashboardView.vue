@@ -34,7 +34,7 @@
               <ul>
                 <li><strong>Joke Setup:</strong> {{ joke.title }}</li>
                 <li><strong>Punchline:</strong> {{ joke.content }}</li>
-                <li><router-link :to="{name: 'Joke', params:{id: joke.id}}">Edit/Delete</router-link></li>
+                <li><router-link :to="{name: 'GetJoke', params:{id: joke.id}}">Edit/Delete</router-link></li>
               </ul>
             </div>
           </div>

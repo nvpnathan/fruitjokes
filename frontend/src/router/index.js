@@ -38,14 +38,14 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
-    path: '/joke/:id',
-    name: 'Joke',
+    path: '/:id',
+    name: 'GetJoke',
     component: JokeView,
     meta: { requiresAuth: true },
     props: true,
   },
   {
-    path: '/editjoke/:id',
+    path: '/:id',
     name: 'EditJoke',
     component: EditJokeView,
     meta: { requiresAuth: true },
