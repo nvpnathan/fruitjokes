@@ -13,7 +13,7 @@ const actions = {
   async register({dispatch}, form) {
     await axios.post('api/v1/register', form);
     let UserForm = new FormData();
-    UserForm.append('email', form.username);
+    UserForm.append('username', form.username);
     UserForm.append('password', form.password);
     UserForm.append('full_name', form.full_name);
     await dispatch('logIn', UserForm);

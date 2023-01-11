@@ -1,7 +1,7 @@
 <template>
     <div v-if="joke">
-      <p><strong>Title:</strong> {{ joke.title }}</p>
-      <p><strong>Content:</strong> {{ joke.content }}</p>
+      <p><strong>Setup:</strong> {{ joke.title }}</p>
+      <p><strong>Punchline:</strong> {{ joke.content }}</p>
       <p><strong>Author:</strong> {{ joke.author.username }}</p>
   
       <div v-if="user.id === joke.author.id">

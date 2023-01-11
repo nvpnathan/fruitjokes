@@ -5,11 +5,11 @@
   
       <form @submit.prevent="submit">
         <div class="mb-3">
-          <label for="title" class="form-label">Title:</label>
+          <label for="title" class="form-label">Setup:</label>
           <input type="text" name="title" v-model="form.title" class="form-control" />
         </div>
         <div class="mb-3">
-          <label for="content" class="form-label">Content:</label>
+          <label for="content" class="form-label">Punchline:</label>
           <textarea
             name="content"
             v-model="form.content"
