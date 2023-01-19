@@ -62,3 +62,13 @@ services:
     command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
     volumes:
       - ./data/cache:/data
+
+  pyroscope:
+    container_name: pyroscope
+    image: pyroscope/pyroscope
+    environment:
+      - PYROSCOPE_LOG_LEVEL=debug
+    ports:
+      - '4040:4040'
+    command:
+      - 'server'

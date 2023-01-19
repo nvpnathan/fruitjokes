@@ -1,4 +1,5 @@
 import uvicorn
+import pyroscope
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
@@ -7,6 +8,13 @@ from app.core.config import settings, TORTOISE_ORM
 from app.api.api_v1.api import api_router
 from app.core.utils import PrometheusMiddleware, metrics
 
+pyroscope.configure(
+    application_name=settings.APP_NAME,
+    server_address="http://pyroscope:4040",
+    tags={
+        "region": "macbook",
+    }
+)
 
 app = FastAPI(
     title=settings.PROJECT_NAME, openapi_url=f"{settings.API_V1_STR}/openapi.json"
