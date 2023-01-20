@@ -20,8 +20,8 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
 # for migrations
-COPY migrations .
-COPY pyproject.toml .
+# COPY migrations .
+# COPY pyproject.toml .
 
 COPY app/ /app/app
 

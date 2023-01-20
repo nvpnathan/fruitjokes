@@ -1,4 +1,4 @@
-# test_cities_wrc.py
+# locust_test.py
 
 import logging
 import random
@@ -7,11 +7,11 @@ import time
 from locust import HttpUser, task, between
 from locust.exception import RescheduleTask
 
-test_email_host = 't.com'
+test_email_host = 'test.local'
 
 
 def unique_str():
-    return '{}'.format, random.randint(1, 99)
+    return '{:.10f}.{}'.format(time.time(), random.randint(1000, 9999))
 
 
 def unique_email():
@@ -28,9 +28,10 @@ def unique_joke_content():
 
 def get_cookie(headers):
     for header in headers:
-        if header[0].lower() == 'set-cookie':
-            return header[1]
+        if header.lower() == 'set-cookie':
+            return headers[header]
     return None
+
 
 class WebsiteTestUser(HttpUser):
     network_timeout = 30.0
@@ -46,8 +47,8 @@ class WebsiteTestUser(HttpUser):
         register_url = base_url + '/register'
         get_token_url = base_url + '/login'
         # urls used in task
-        self.cities_create_url = base_url + '/jokes'
-        self.cities_get_by_id_url = base_url + '/jokes/'
+        self.jokes_create_url = base_url + '/jokes'
+        self.jokes_get_by_id_url = base_url + '/jokes/'
 
         # get unique email
         email = unique_email()
@@ -69,11 +70,11 @@ class WebsiteTestUser(HttpUser):
             get_token_url,
             data={'username': email, 'password': password},
         )
-        access_token = get_cookie(response.headers.items())
+        access_token = response.headers['set-cookie']
         logging.debug('get_token: for email = {}, access_token = {}'.format(email, access_token))
 
         # set headers with access token
-        self.headers = {access_token}
+        self.headers = {'Authorization': 'Bearer ' + access_token, 'content-type': 'application/json'}
 
     def on_stop(self):
         pass
@@ -84,19 +85,19 @@ class WebsiteTestUser(HttpUser):
         pass
 
     @task
-    def cities_write_read_check(self):
-        # add city to api
+    def jokes_write_read_check(self):
+        # add joke to api
         joke_title = unique_joke_title()
         joke_content = unique_joke_content()
-        logging.debug('cities_create: city_name = {}'.format(joke_title))
+        logging.debug('jokes_create: joke_name = {}'.format(joke_title))
         with self.client.post(
-                self.cities_create_url,
+                self.jokes_create_url,
                 json={'title': joke_title, 'content': joke_content},
                 headers=self.headers,
                 catch_response=True,
         ) as response:
 
-            if response.status_code != 201:
+            if response.status_code != 200:
                 error_msg = 'jokes_create: response.status_code = {}, expected 201, joke_title = {}'.format(
                     response.status_code, joke_title)
                 logging.error(error_msg)
@@ -104,43 +105,43 @@ class WebsiteTestUser(HttpUser):
                 raise RescheduleTask()
 
             response_dict = response.json()
-            if 'data' not in response_dict:
-                error_msg = 'cities_create: data not in response_dict, joke_title = {}'.format(joke_title)
+            if 'id' not in response_dict:
+                error_msg = 'jokes_create: data not in response_dict, joke_title = {}'.format(joke_title)
                 logging.error(error_msg)
                 response.failure(error_msg)
                 raise RescheduleTask()
 
-            joke_id = response_dict['data']['id']
-            logging.debug('cities_create: for city_name = {}, joke_id = {}'.format(joke_title, joke_id))
+            joke_id = response_dict['id']
+            logging.debug('jokes_create: for joke_name = {}, joke_id = {}'.format(joke_title, joke_id))
 
-        # get city from api and check
+        # get joke from api and check
         with self.client.get(
-                self.cities_get_by_id_url + joke_id,
+                self.jokes_get_by_id_url + joke_id,
                 headers=self.headers,
-                name=self.cities_get_by_id_url + 'uuid',
+                name=self.jokes_get_by_id_url + 'id',
                 catch_response=True,
         ) as response:
 
             if response.status_code != 200:
-                error_msg = 'cities_get_by_id: response.status_code = {}, expected 200, city_name = {}'.format(
+                error_msg = 'jokes_get_by_id: response.status_code = {}, expected 200, jokes_title = {}'.format(
                     response.status_code, joke_title)
                 logging.error(error_msg)
                 response.failure(error_msg)
                 raise RescheduleTask()
 
-            if 'data' not in response_dict:
-                error_msg = 'cities_get_by_id: data not in response_dict, city_name = {}'.format(joke_title)
+            if 'id' not in response_dict:
+                error_msg = 'jokes_get_by_id: data not in response_dict, jokes_name = {}'.format(joke_title)
                 logging.error(error_msg)
                 response.failure(error_msg)
                 raise RescheduleTask()
 
-            city_name_returned = response_dict['data']['name']
+            joke_name_returned = response_dict['title']
             logging.debug(
-                'cities_get_by_id: for city_id = {}, city_name_returned = {}'.format(joke_id, city_name_returned))
+                'jokes_get_by_id: for joke_id = {}, joke_name_returned = {}'.format(joke_id, joke_name_returned))
 
-            if city_name_returned != joke_title:
-                error_msg = 'cities_get_by_id: city_name_returned = {} not equal city_name = {}'.format(
-                    city_name_returned, joke_title)
+            if joke_name_returned != joke_title:
+                error_msg = 'jokes_get_by_id: joke_name_returned = {} not equal joke_name = {}'.format(
+                    joke_name_returned, joke_title)
                 logging.error(error_msg)
                 response.failure(error_msg)
                 raise RescheduleTask()
