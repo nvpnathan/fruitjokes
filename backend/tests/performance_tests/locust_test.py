@@ -41,14 +41,14 @@ class WebsiteTestUser(HttpUser):
 
     def on_start(self):
 
-        base_url = 'http://127.0.0.1:5000/api/v1'
+        base_url = 'https://fruitjokes-backend.fly.dev/api/v1'
 
         # set up urls
         register_url = base_url + '/register'
         get_token_url = base_url + '/login'
         # urls used in task
         self.jokes_create_url = base_url + '/jokes'
-        self.jokes_get_by_id_url = base_url + '/jokes/'
+        self.jokes_get_by_id_url = base_url + '/joke/'
 
         # get unique email
         email = unique_email()
