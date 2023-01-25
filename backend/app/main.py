@@ -10,9 +10,9 @@ from app.core.utils import PrometheusMiddleware, metrics
 
 pyroscope.configure(
     application_name=settings.APP_NAME,
-    server_address="http://pyroscope:4040",
+    server_address=settings.PYROSCOPE_HOST,
     tags={
-        "region": "macbook",
+        "region": "us-west-2",
     }
 )
 

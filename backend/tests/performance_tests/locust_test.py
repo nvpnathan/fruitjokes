@@ -41,7 +41,7 @@ class WebsiteTestUser(HttpUser):
 
     def on_start(self):
 
-        base_url = 'https://fruitjokes-backend.fly.dev/api/v1'
+        base_url = 'http://fruit-publi-5y7ql3lcvnhy-1082926114.us-west-2.elb.amazonaws.com'
 
         # set up urls
         register_url = base_url + '/register'

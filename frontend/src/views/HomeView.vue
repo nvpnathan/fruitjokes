@@ -3,7 +3,7 @@
     <h1><b>Welcome to FruitJokes!</b></h1>
     <p>
       <video width="750" height="500" controls autoplay >
-      <source src="/videos/fruitjokes.mp4" type="video/mp4"/>
+      <source src="/fruitjokes/videos/fruitjokes.mp4" type="video/mp4"/>
      </video>
     </p>
 
