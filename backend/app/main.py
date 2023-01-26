@@ -8,20 +8,22 @@ from app.core.config import settings, TORTOISE_ORM
 from app.api.api_v1.api import api_router
 from app.core.utils import PrometheusMiddleware, metrics
 
-pyroscope.configure(
-    application_name=settings.APP_NAME,
-    server_address=settings.PYROSCOPE_HOST,
-    tags={
-        "region": "us-west-2",
-    }
-)
+
+if settings.PYROSCOPE_HOST is not None:
+    pyroscope.configure(
+        application_name=settings.APP_CONFIG.APP_NAME,
+        server_address=settings.PYROSCOPE_HOST,
+        tags={
+            "region": "us-west-2",
+        }
+    )
 
 app = FastAPI(
-    title=settings.PROJECT_NAME, openapi_url=f"{settings.API_V1_STR}/openapi.json"
+    title=settings.PROJECT_NAME, openapi_url=f"{settings.APP_CONFIG.API_V1_STR}/openapi.json"
 )
 
 # Setting metrics middleware
-app.add_middleware(PrometheusMiddleware, app_name=settings.APP_NAME)
+app.add_middleware(PrometheusMiddleware, app_name=settings.APP_CONFIG.APP_NAME)
 app.add_route("/metrics", metrics)
 
 if settings.BACKEND_CORS_ORIGINS:
@@ -33,7 +35,7 @@ if settings.BACKEND_CORS_ORIGINS:
         allow_headers=["*"],
     )
 
-app.include_router(api_router, prefix=settings.API_V1_STR)
+app.include_router(api_router, prefix=settings.APP_CONFIG.API_V1_STR)
 
 register_tortoise(app, config=TORTOISE_ORM, generate_schemas=False)
 

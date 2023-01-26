@@ -1,5 +1,5 @@
 # locust_test.py
-
+import os
 import logging
 import random
 import time
@@ -41,14 +41,14 @@ class WebsiteTestUser(HttpUser):
 
     def on_start(self):
 
-        base_url = 'http://fruit-publi-5y7ql3lcvnhy-1082926114.us-west-2.elb.amazonaws.com'
-
+        base_url = os.getenv('BASE_URL')
+        api_ver = '/api/v1'
         # set up urls
-        register_url = base_url + '/register'
-        get_token_url = base_url + '/login'
+        register_url = base_url + api_ver + '/register'
+        get_token_url = base_url + api_ver + '/login'
         # urls used in task
-        self.jokes_create_url = base_url + '/jokes'
-        self.jokes_get_by_id_url = base_url + '/joke/'
+        self.jokes_create_url = base_url + api_ver + '/jokes'
+        self.jokes_get_by_id_url = base_url + api_ver + '/joke/'
 
         # get unique email
         email = unique_email()
@@ -116,7 +116,7 @@ class WebsiteTestUser(HttpUser):
 
         # get joke from api and check
         with self.client.get(
-                self.jokes_get_by_id_url + joke_id,
+                self.jokes_get_by_id_url + str(joke_id),
                 headers=self.headers,
                 name=self.jokes_get_by_id_url + 'id',
                 catch_response=True,
