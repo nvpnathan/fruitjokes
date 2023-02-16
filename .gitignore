@@ -117,6 +117,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+env_file
 
 # Spyder project settings
 .spyderproject
@@ -268,3 +269,4 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+fly.toml
