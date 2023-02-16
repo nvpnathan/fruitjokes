@@ -16,4 +16,11 @@ repos:
   rev: 6.0.0
   hooks:
   - id: flake8
- #   files: backend/app
+    files: backend/app
+
+- repo: https://github.com/pre-commit/mirrors-eslint
+  rev: v8.4.0
+  hooks:
+  - id: eslint
+    args: ["--ext", ".js,.vue"]
+    files: frontend/
