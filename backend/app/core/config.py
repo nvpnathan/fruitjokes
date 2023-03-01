@@ -102,6 +102,7 @@ class ProdConfig(GlobalConfig):
             port=values.get("POSTGRES_PORT"),
             path=f"/{values.get('POSTGRES_DB') or ''}",
         )
+
     class Config:
         case_sensitive = True
         env_file = str = "../.env"

@@ -1,4 +1,4 @@
-FROM node:lts-alpine
+FROM public.ecr.aws/docker/library/node:18 AS build
 
 MAINTAINER nvpnathan
 
@@ -13,6 +13,11 @@ COPY package*.json ./
 
 # install project dependencies
 RUN npm install
+
+# Second stage build
+FROM public.ecr.aws/docker/library/node:18-slim
+
+COPY --from=build /app .
 
 # copy project files and folders to the current working directory (i.e. 'app' folder)
 COPY . .
