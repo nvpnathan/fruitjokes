@@ -1,18 +1,13 @@
 # Fruit Jokes
 
-Fruit Jokes is an open‑source API . It helps professional Node.js developers develop quality Node.js applications without spending time on repetitive coding tasks.
-
-Amplication auto-generates backend apps built with TypeScript and Node.js, and a client built with React.
-
-# Features
+## Features
 
 - REST API built with FastAPI
-- Admin UI
 - Role-based access control
 - Docker and docker-compose for local testing
 - Swagger API for documentation
 
-# Getting Started
+## Getting Started
 
 You can get started with Fruit Jokes immediately on ECS Fargate. 
 
